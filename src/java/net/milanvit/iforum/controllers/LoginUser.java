@@ -5,12 +5,17 @@
 package net.milanvit.iforum.controllers;
 
 import java.io.IOException;
+import java.util.Date;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import net.milanvit.iforum.controllers.exceptions.NonexistentEntityException;
+import net.milanvit.iforum.controllers.exceptions.RollbackFailureException;
 import net.milanvit.iforum.helpers.Hash;
 import net.milanvit.iforum.models.User;
 import net.milanvit.iforum.models.ValidationErrors;
@@ -24,6 +29,7 @@ public class LoginUser extends HttpServlet {
 	private String username;
 	private String password;
 	private User user;
+	private UserController userController = new UserController (null, null);
 	private ValidationErrors validationErrors = new ValidationErrors ();
 
 	/** 
@@ -36,7 +42,6 @@ public class LoginUser extends HttpServlet {
 	protected void processRequest (HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 		HttpSession httpSession = request.getSession ();
-		UserController userController = new UserController (null, null);
 
 		username = request.getParameter ("username");
 		password = Hash.toSHA256 (request.getParameter ("password"));
@@ -48,6 +53,7 @@ public class LoginUser extends HttpServlet {
 			request.setAttribute ("validationErrors", validationErrors);
 			request.getRequestDispatcher ("indexerror.jsp").forward (request, response);
 		} else {
+			updateLoginCount (user);
 			httpSession.setAttribute ("username", username);
 			response.sendRedirect ("secure/index.jsp");
 		}
@@ -71,6 +77,23 @@ public class LoginUser extends HttpServlet {
 
 		if (user == null) {
 			validationErrors.insertNewErrorMessage ("User does not exist!");
+		}
+	}
+
+	/**
+	 * Adds number one to login count and updates last login date/time.
+	 */
+	private void updateLoginCount (User user) {
+		Integer loginCount = user.getLoginCount ();
+		Date loginLast = new Date ();
+
+		loginCount = (loginCount == null) ? 1 : ++loginCount;
+		user.setLoginCount (loginCount);
+		user.setLoginLast (loginLast);
+
+		try {
+			userController.edit (user);
+		} catch (Exception ex) {
 		}
 	}
 
