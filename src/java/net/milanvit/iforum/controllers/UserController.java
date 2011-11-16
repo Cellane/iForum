@@ -6,6 +6,7 @@ package net.milanvit.iforum.controllers;
 
 import java.io.Serializable;
 import java.util.List;
+import javax.annotation.PreDestroy;
 import javax.annotation.Resource;
 import javax.naming.Context;
 import javax.naming.InitialContext;
@@ -30,7 +31,6 @@ import net.milanvit.iforum.models.User;
 public class UserController implements Serializable {
 	@Resource
 	private UserTransaction userTransaction = null;
-	
 	@PersistenceUnit (unitName = "iForumPersistenceUnit")
 	private EntityManagerFactory entityManagerFactory = null;
 
@@ -43,14 +43,14 @@ public class UserController implements Serializable {
 		if (entityManagerFactory == null) {
 			entityManagerFactory = Persistence.createEntityManagerFactory ("iForumPersistenceUnit");
 		}
-		
+
 		return (entityManagerFactory.createEntityManager ());
 	}
 
 	public void create (User user) throws PreexistingEntityException, RollbackFailureException, Exception {
 		Context context = new InitialContext ();
 		EntityManager entityManager = null;
-		
+
 		userTransaction = (UserTransaction) context.lookup ("java:comp/UserTransaction");
 
 		try {
@@ -82,7 +82,7 @@ public class UserController implements Serializable {
 	public void edit (User user) throws NonexistentEntityException, RollbackFailureException, Exception {
 		Context context = new InitialContext ();
 		EntityManager entityManager = null;
-		
+
 		userTransaction = (UserTransaction) context.lookup ("java:comp/UserTransaction");
 
 		try {
@@ -100,7 +100,7 @@ public class UserController implements Serializable {
 			}
 
 			String message = e.getLocalizedMessage ();
-			
+
 			if ((message == null) || (message.length () == 0)) {
 				String id = user.getUsername ();
 
@@ -203,5 +203,11 @@ public class UserController implements Serializable {
 		} finally {
 			entityManager.close ();
 		}
+	}
+
+	// EXPERIMENTAL
+	@PreDestroy
+	public void destruct () {
+		entityManagerFactory.close ();
 	}
 }
