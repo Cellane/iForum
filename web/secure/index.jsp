@@ -18,7 +18,7 @@
 		
 		<p>
 			Hello, <c:out value="${sessionScope.username}" />! Maybe you want
-			to see the <a href="listOfUsers">list of all users</a>?</p>
+			to see the <a href="listofusers.jsp">list of all users</a>?</p>
 		
 		<p><a href="../logout.jsp">Or maybe it's time to log out</a>?</p>
     </body>
