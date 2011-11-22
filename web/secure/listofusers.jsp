@@ -38,7 +38,7 @@
 					<td><img src="${user.avatar}" width="64" heighth="64" /></td>
 					<td>
 						<c:choose>
-							<c:when test="${user.sex == true}">
+							<c:when test="${user.sex}">
 								Male
 							</c:when>
 							<c:otherwise>
