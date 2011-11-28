@@ -117,7 +117,10 @@ public class ThreadController implements Serializable {
 	}
 
 	public void edit (Thread thread) throws IllegalOrphanException, NonexistentEntityException, RollbackFailureException, Exception {
+		Context context = new InitialContext ();
 		EntityManager entityManager = null;
+		
+		userTransaction = (UserTransaction) context.lookup ("java:comp/UserTransaction");
 
 		try {
 			userTransaction.begin ();
@@ -141,8 +144,9 @@ public class ThreadController implements Serializable {
 			}
 
 			if (illegalOrphanMessages != null) {
-				throw new IllegalOrphanException (illegalOrphanMessages);
+				throw (new IllegalOrphanException (illegalOrphanMessages));
 			}
+			
 			if (authorNew != null) {
 				authorNew = entityManager.getReference (authorNew.getClass (), authorNew.getUsername ());
 				thread.setAuthor (authorNew);
@@ -159,12 +163,12 @@ public class ThreadController implements Serializable {
 			thread.setPostCollection (postCollectionNew);
 			thread = entityManager.merge (thread);
 
-			if (authorOld != null && !authorOld.equals (authorNew)) {
+			if ((authorOld != null) && (!authorOld.equals (authorNew))) {
 				authorOld.getThreadCollection ().remove (thread);
 				authorOld = entityManager.merge (authorOld);
 			}
 
-			if (authorNew != null && !authorNew.equals (authorOld)) {
+			if ((authorNew != null) && (!authorNew.equals (authorOld))) {
 				authorNew.getThreadCollection ().add (thread);
 				authorNew = entityManager.merge (authorNew);
 			}
@@ -176,7 +180,7 @@ public class ThreadController implements Serializable {
 					postCollectionNewPost.setThread (thread);
 					postCollectionNewPost = entityManager.merge (postCollectionNewPost);
 
-					if (oldThreadOfPostCollectionNewPost != null && !oldThreadOfPostCollectionNewPost.equals (thread)) {
+					if ((oldThreadOfPostCollectionNewPost != null) && (!oldThreadOfPostCollectionNewPost.equals (thread))) {
 						oldThreadOfPostCollectionNewPost.getPostCollection ().remove (postCollectionNewPost);
 						oldThreadOfPostCollectionNewPost = entityManager.merge (oldThreadOfPostCollectionNewPost);
 					}

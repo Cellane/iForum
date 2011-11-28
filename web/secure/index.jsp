@@ -24,7 +24,7 @@
 			Hello, <c:out value="${sessionScope.username}" />! Maybe you want
 			to see the <a href="listofusers.jsp">list of all users</a>?</p>
 
-		<p><a href="../logout.jsp">Or maybe it's time to log out</a>?</p>
+		<p>Or maybe it's time to <a href="../logout.jsp">log out</a>?</p>
 
 		<p>
 			Here is the list of all threads. If you'd like to discuss something
@@ -52,7 +52,7 @@
 					</td>
 					<td><a href="showthread.jsp?id=${thread.id}">${thread.title}</a></td>
 					<td>${thread.author.username}</td>
-					<td><fmt:formatDate pattern="dd. MM. yyyy, hh.mm:ss"
+					<td><fmt:formatDate pattern="dd. MM. yyyy, HH.mm:ss"
 									value="${thread.created}" /></td>
 				</tr>
 			</c:forEach>

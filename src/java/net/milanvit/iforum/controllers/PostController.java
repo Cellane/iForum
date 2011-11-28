@@ -8,6 +8,8 @@ import java.io.Serializable;
 import java.util.List;
 import javax.annotation.PreDestroy;
 import javax.annotation.Resource;
+import javax.naming.Context;
+import javax.naming.InitialContext;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Query;
@@ -48,7 +50,10 @@ public class PostController implements Serializable {
 	}
 
 	public void create (Post post) throws RollbackFailureException, Exception {
+		Context context = new InitialContext ();
 		EntityManager entityManager = null;
+
+		userTransaction = (UserTransaction) context.lookup ("java:comp/UserTransaction");
 		
 		try {
 			userTransaction.begin ();

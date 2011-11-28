@@ -13,6 +13,8 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import net.milanvit.iforum.controllers.exceptions.RollbackFailureException;
+import net.milanvit.iforum.models.Post;
 import net.milanvit.iforum.models.Thread;
 import net.milanvit.iforum.models.User;
 
@@ -20,13 +22,12 @@ import net.milanvit.iforum.models.User;
  *
  * @author Milan
  */
-@WebServlet (name = "CreateThread", urlPatterns = {"/secure/createThread"})
-public class CreateThread extends HttpServlet {
-	private String title;
-	private String post;
-	private String author;
+@WebServlet (name = "CreatePost", urlPatterns = {"/secure/createPost"})
+public class CreatePost extends HttpServlet {
 	private Date created;
-	private boolean locked;
+	private String postText;
+	private String author;
+	private int threadId;
 	
 	/** 
 	 * Processes requests for both HTTP <code>GET</code> and <code>POST</code> methods.
@@ -37,37 +38,42 @@ public class CreateThread extends HttpServlet {
 	 */
 	protected void processRequest (HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
+		Post post = null;
+		PostController postController = new PostController (null, null);
 		Thread thread = null;
 		ThreadController threadController = new ThreadController (null, null);
 		User user = null;
 		UserController userController = new UserController (null, null);
 		
-		parseValues (request);
+		parseVariables (request);
 		
 		user = userController.findUser (author);
+		thread = threadController.findThread (threadId);
 		
-		thread = new Thread ();
-		thread.setAuthor (user);
-		thread.setCreated (created);
-		thread.setLocked (locked);
-		thread.setPost (post);
-		thread.setTitle (title);
+		post = new Post ();
+		post.setAuthor (user);
+		post.setCreated (created);
+		post.setPost (postText);
+		post.setThread (thread);
 		
-		try {
-			threadController.create (thread);
+		if (!thread.getLocked ()) {		
+			try {
+				postController.create (post);
 			
-			response.sendRedirect ("index.jsp");
-		} catch (Exception e) {
-			Logger.getLogger (CreateThread.class.getName()).log (Level.SEVERE, null, e);
+				response.sendRedirect ("showthread.jsp?id=" + threadId);
+			} catch (Exception e) {
+				Logger.getLogger (CreatePost.class.getName()).log (Level.SEVERE, null, e);
+			}
+		} else {
+			System.out.println ("Someone's hacking us! Halp!");
 		}
 	}
-	
-	private void parseValues (HttpServletRequest request) {
-		title = request.getParameter ("title");
-		post = request.getParameter ("post");
+
+	private void parseVariables (HttpServletRequest request) throws NumberFormatException {
+		postText = request.getParameter ("post");
+		threadId = Integer.parseInt (request.getParameter ("thread"));
 		author = (String) request.getSession ().getAttribute ("username");
 		created = new Date ();
-		locked = false;
 	}
 
 	// <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">

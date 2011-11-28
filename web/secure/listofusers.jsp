@@ -50,7 +50,7 @@
 					</td>
 					<td>${user.loginCount}</td>
 					<td>
-						<fmt:formatDate pattern="dd. MM. yyyy, hh.mm:ss"
+						<fmt:formatDate pattern="dd. MM. yyyy, HH.mm:ss"
 										value="${user.loginLast}" />
 					</td>
 				</tr>

@@ -5,7 +5,6 @@
 package net.milanvit.iforum.controllers;
 
 import java.io.IOException;
-import java.util.Date;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.servlet.ServletException;
@@ -13,6 +12,9 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import net.milanvit.iforum.controllers.exceptions.IllegalOrphanException;
+import net.milanvit.iforum.controllers.exceptions.NonexistentEntityException;
+import net.milanvit.iforum.controllers.exceptions.RollbackFailureException;
 import net.milanvit.iforum.models.Thread;
 import net.milanvit.iforum.models.User;
 
@@ -20,14 +22,8 @@ import net.milanvit.iforum.models.User;
  *
  * @author Milan
  */
-@WebServlet (name = "CreateThread", urlPatterns = {"/secure/createThread"})
-public class CreateThread extends HttpServlet {
-	private String title;
-	private String post;
-	private String author;
-	private Date created;
-	private boolean locked;
-	
+@WebServlet (name = "LockThread", urlPatterns = {"/secure/lockThread"})
+public class LockThread extends HttpServlet {	
 	/** 
 	 * Processes requests for both HTTP <code>GET</code> and <code>POST</code> methods.
 	 * @param request servlet request
@@ -39,35 +35,26 @@ public class CreateThread extends HttpServlet {
 			throws ServletException, IOException {
 		Thread thread = null;
 		ThreadController threadController = new ThreadController (null, null);
-		User user = null;
 		UserController userController = new UserController (null, null);
+		User user = null;
+		int id = Integer.parseInt (request.getParameter ("id"));
 		
-		parseValues (request);
+		thread = threadController.findThread (id);
+		user = userController.findUser ((String) request.getSession ().getAttribute ("username"));
 		
-		user = userController.findUser (author);
-		
-		thread = new Thread ();
-		thread.setAuthor (user);
-		thread.setCreated (created);
-		thread.setLocked (locked);
-		thread.setPost (post);
-		thread.setTitle (title);
-		
-		try {
-			threadController.create (thread);
+		if (user.getUsername ().equals (thread.getAuthor ().getUsername ())) {
+			thread.setLocked (!thread.getLocked ());
 			
-			response.sendRedirect ("index.jsp");
-		} catch (Exception e) {
-			Logger.getLogger (CreateThread.class.getName()).log (Level.SEVERE, null, e);
+			try {
+				threadController.edit (thread);
+			} catch (Exception e) {
+				Logger.getLogger (LockThread.class.getName()).log (Level.SEVERE, null, e);
+			}
+			
+			response.sendRedirect ("showthread.jsp?id=" + id);
+		} else {
+			System.out.println ("Someone's hacking us! Halp!");
 		}
-	}
-	
-	private void parseValues (HttpServletRequest request) {
-		title = request.getParameter ("title");
-		post = request.getParameter ("post");
-		author = (String) request.getSession ().getAttribute ("username");
-		created = new Date ();
-		locked = false;
 	}
 
 	// <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">

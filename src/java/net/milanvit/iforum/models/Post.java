@@ -39,7 +39,6 @@ public class Post implements Serializable {
 	@Id
     @GeneratedValue (strategy = GenerationType.IDENTITY)
     @Basic (optional = false)
-    @NotNull
     @Column (name = "id")
 	private Integer id;
 	
@@ -78,7 +77,7 @@ public class Post implements Serializable {
 	}
 
 	public Integer getId () {
-		return id;
+		return (id);
 	}
 
 	public void setId (Integer id) {
@@ -94,7 +93,7 @@ public class Post implements Serializable {
 	}
 
 	public String getPost () {
-		return post;
+		return (post);
 	}
 
 	public void setPost (String post) {
@@ -102,7 +101,7 @@ public class Post implements Serializable {
 	}
 
 	public User getAuthor () {
-		return author;
+		return (author);
 	}
 
 	public void setAuthor (User author) {
@@ -110,7 +109,7 @@ public class Post implements Serializable {
 	}
 
 	public Thread getThread () {
-		return thread;
+		return (thread);
 	}
 
 	public void setThread (Thread thread) {
@@ -120,26 +119,29 @@ public class Post implements Serializable {
 	@Override
 	public int hashCode () {
 		int hash = 0;
-		hash += (id != null ? id.hashCode () : 0);
-		return hash;
+		
+		hash += ((id != null) ? id.hashCode () : 0);
+		
+		return (hash);
 	}
 
 	@Override
 	public boolean equals (Object object) {
-		// TODO: Warning - this method won't work in the case the id fields are not set
 		if (!(object instanceof Post)) {
-			return false;
+			return (false);
 		}
+		
 		Post other = (Post) object;
-		if ((this.id == null && other.id != null) || (this.id != null && !this.id.equals (other.id))) {
-			return false;
+		
+		if (((this.id == null) && (other.id != null)) || ((this.id != null) && (!this.id.equals (other.id)))) {
+			return (false);
 		}
-		return true;
+		
+		return (true);
 	}
 
 	@Override
 	public String toString () {
-		return "net.milanvit.iforum.models.Post[ id=" + id + " ]";
+		return ("net.milanvit.iforum.models.Post[ id=" + id + " ]");
 	}
-	
 }

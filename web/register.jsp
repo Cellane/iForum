@@ -46,7 +46,7 @@
 					</td>
 				</tr>
 				<tr>
-					<td></td>
+					<td><a href="index.jsp">Back</a></td>
 					<td><input type="submit" value="Register" /></td>
 				</tr>
 			</table>

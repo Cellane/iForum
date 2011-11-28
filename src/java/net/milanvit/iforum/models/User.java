@@ -173,7 +173,7 @@ public class User implements Serializable {
 	public int hashCode () {
 		int hash = 0;
 
-		hash += (username != null ? username.hashCode () : 0);
+		hash += ((username != null) ? username.hashCode () : 0);
 
 		return (hash);
 	}
