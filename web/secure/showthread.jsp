@@ -58,6 +58,10 @@
 		<c:forEach var="post" items="${posts}">
 			<c:if test="${post.thread.id == thread.id}">
 				<div style="float: right">
+					<c:if test="${post.author.username == sessionScope.username}">
+						<a href="deletePost?id=${post.id}">delete</a> |
+					</c:if>
+					
 					${post.author.username} on
 					<fmt:formatDate pattern="dd. MM. yyyy, HH.mm:ss"
 									value="${post.created}" />

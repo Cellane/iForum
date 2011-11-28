@@ -171,7 +171,10 @@ public class PostController implements Serializable {
 	}
 
 	public void destroy (Integer id) throws NonexistentEntityException, RollbackFailureException, Exception {
+		Context context = new InitialContext ();
 		EntityManager entityManager = null;
+		
+		userTransaction = (UserTransaction) context.lookup ("java:comp/UserTransaction");
 		
 		try {
 			userTransaction.begin ();
