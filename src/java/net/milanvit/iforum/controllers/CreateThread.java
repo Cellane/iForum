@@ -6,28 +6,28 @@ package net.milanvit.iforum.controllers;
 
 import java.io.IOException;
 import java.util.Date;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
-import net.milanvit.iforum.helpers.Hash;
+import net.milanvit.iforum.models.Thread;
 import net.milanvit.iforum.models.User;
-import net.milanvit.iforum.models.ValidationErrors;
 
 /**
  *
  * @author Milan
  */
-@WebServlet (name = "LoginUser", urlPatterns = {"/loginUser"})
-public class LoginUser extends HttpServlet {
-	private String username;
-	private String password;
-	private User user;
-	private UserController userController = new UserController (null, null);
-	private ValidationErrors validationErrors = new ValidationErrors ();
-
+@WebServlet (name = "CreateThread", urlPatterns = {"/secure/createThread"})
+public class CreateThread extends HttpServlet {
+	private String title;
+	private String post;
+	private String author;
+	private Date created;
+	private boolean locked;
+	
 	/** 
 	 * Processes requests for both HTTP <code>GET</code> and <code>POST</code> methods.
 	 * @param request servlet request
@@ -37,60 +37,45 @@ public class LoginUser extends HttpServlet {
 	 */
 	protected void processRequest (HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
-		HttpSession httpSession = request.getSession ();
-
-		username = request.getParameter ("username");
-		password = Hash.toSHA256 (request.getParameter ("password"));
-		user = userController.findUser (username);
-
-		validateValues ();
-
-		if (!validationErrors.isEmpty ()) {
-			request.setAttribute ("validationErrors", validationErrors);
-			request.getRequestDispatcher ("indexerror.jsp").forward (request, response);
-		} else {
-			updateLoginCount (user);
-			httpSession.setAttribute ("username", username);
-			response.sendRedirect ("secure/index.jsp");
-		}
-	}
-
-	/**
-	 * Validates values entered in login form.
-	 */
-	private void validateValues () {
-		if (username.isEmpty ()) {
-			validationErrors.insertNewErrorMessage ("Username is empty!");
-		}
-
-		if (password != null && user != null) {
-			if (!password.equals (user.getPassword ())) {
-				validationErrors.insertNewErrorMessage ("Password is incorrect!");
-			}
-		} else {
-			validationErrors.insertNewErrorMessage ("Password is empty!");
-		}
-
-		if (user == null) {
-			validationErrors.insertNewErrorMessage ("User does not exist!");
-		}
-	}
-
-	/**
-	 * Adds number one to login count and updates last login date/time.
-	 */
-	private void updateLoginCount (User user) {
-		Integer loginCount = user.getLoginCount ();
-		Date loginLast = new Date ();
-
-		loginCount = (loginCount == null) ? 1 : ++loginCount;
-		user.setLoginCount (loginCount);
-		user.setLoginLast (loginLast);
-
+		Thread thread = null;
+		ThreadController threadController = new ThreadController (null, null);
+		User user = null;
+		UserController userController = new UserController (null, null);
+		
+		parseValues (request);
+		
+		user = userController.findUser (author);
+		
+		thread = new Thread ();
+		thread.setAuthor (user);
+		thread.setCreated (created);
+		thread.setLocked (locked);
+		thread.setPost (post);
+		thread.setTitle (title);
+		
+		System.out.println ("id = " + thread.getId ());
+		System.out.println ("created = " + created);
+		System.out.println ("locked = " + locked);
+		System.out.println ("post = " + post);
+		System.out.println ("title = " + title);
+		System.out.println ("author = " + author);
+		System.out.println ("user = " + user);
+		
 		try {
-			userController.edit (user);
+			threadController.create (thread);
+			
+			response.sendRedirect ("index.jsp");
 		} catch (Exception e) {
+			Logger.getLogger (CreateThread.class.getName()).log (Level.SEVERE, null, e);
 		}
+	}
+	
+	private void parseValues (HttpServletRequest request) {
+		title = request.getParameter ("title");
+		post = request.getParameter ("post");
+		author = (String) request.getSession ().getAttribute ("username");
+		created = new Date ();
+		locked = false;
 	}
 
 	// <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
@@ -126,6 +111,6 @@ public class LoginUser extends HttpServlet {
 	 */
 	@Override
 	public String getServletInfo () {
-		return ("Short description");
+		return "Short description";
 	}// </editor-fold>
 }

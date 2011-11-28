@@ -3,7 +3,10 @@
   <persistence-unit name="iForumPersistenceUnit" transaction-type="JTA">
     <jta-data-source>jdbc/java2</jta-data-source>
     <class>net.milanvit.iforum.models.User</class>
+    <class>net.milanvit.iforum.models.Thread</class>
+    <class>net.milanvit.iforum.models.Post</class>
     <exclude-unlisted-classes>true</exclude-unlisted-classes>
+    <shared-cache-mode>NONE</shared-cache-mode>
     <properties>
     </properties>
   </persistence-unit>
