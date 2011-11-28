@@ -10,7 +10,7 @@
 <%@ page session="true" %>
 <%@ page contentType="text/html" pageEncoding="UTF-8" %>
 <%! ThreadController threadController = new ThreadController (null, null); %>
-<c:set var="threads" value="<%= threadController.findThreadEntities ()%>" />
+<c:set var="threads" value="<%= threadController.findThreadEntities () %>" />
 <!DOCTYPE html>
 <html>
     <head>
