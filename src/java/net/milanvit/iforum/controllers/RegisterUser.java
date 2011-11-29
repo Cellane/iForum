@@ -12,6 +12,7 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import net.milanvit.iforum.helpers.Hash;
 import net.milanvit.iforum.models.User;
 import net.milanvit.iforum.models.ValidationErrors;
 
@@ -48,7 +49,7 @@ public class RegisterUser extends HttpServlet {
 			request.setAttribute ("validationErrors", validationErrors);
 			request.getRequestDispatcher ("registererror.jsp").forward (request, response);
 		} else {
-			user = new User (username, age, avatar, password, sex);
+			user = new User (username, age, avatar, Hash.toSHA256 (password), sex);
 
 			try {
 				userController.create (user);
