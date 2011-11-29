@@ -162,7 +162,7 @@ public class PostController implements Serializable {
 					throw (new NonexistentEntityException ("The post with id " + id + " no longer exists."));
 				}
 			}
-			throw e;
+			throw (e);
 		} finally {
 			if (entityManager != null) {
 				entityManager.close ();

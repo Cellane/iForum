@@ -6,12 +6,17 @@ package net.milanvit.iforum.controllers;
 
 import java.io.IOException;
 import java.util.Date;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import net.milanvit.iforum.controllers.exceptions.IllegalOrphanException;
+import net.milanvit.iforum.controllers.exceptions.NonexistentEntityException;
+import net.milanvit.iforum.controllers.exceptions.RollbackFailureException;
 import net.milanvit.iforum.helpers.Hash;
 import net.milanvit.iforum.models.User;
 import net.milanvit.iforum.models.ValidationErrors;
@@ -86,10 +91,11 @@ public class LoginUser extends HttpServlet {
 		loginCount = (loginCount == null) ? 1 : ++loginCount;
 		user.setLoginCount (loginCount);
 		user.setLoginLast (loginLast);
-
+		
 		try {
 			userController.edit (user);
 		} catch (Exception e) {
+			Logger.getLogger (LoginUser.class.getName()).log (Level.SEVERE, null, e);
 		}
 	}
 

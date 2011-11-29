@@ -21,7 +21,7 @@
         <h1>iForum | secured area</h1>
 
 		<p>
-			Hello, <c:out value="${sessionScope.username}" />! Maybe you want
+			Hello, <c:out value="${sessionScope.username}" />! Maybe you'd like
 			to see the <a href="listofusers.jsp">list of all users</a>?</p>
 
 		<p>Or maybe it's time to <a href="../logout.jsp">log out</a>?</p>

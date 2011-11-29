@@ -49,7 +49,7 @@ public class LoginFilter implements Filter {
 		HttpServletResponse httpServletResponse = (HttpServletResponse) response;
 		String username = (String) httpServletRequest.getSession ().getAttribute ("username");
 		
-		if (username == null || username.isEmpty ()) {
+		if ((username == null) || (username.isEmpty ())) {
 			httpServletResponse.sendRedirect (httpServletRequest.getContextPath () + "/index.jsp");
 		} else {
 			chain.doFilter (request, response);

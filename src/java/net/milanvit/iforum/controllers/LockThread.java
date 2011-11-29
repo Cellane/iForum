@@ -12,9 +12,6 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import net.milanvit.iforum.controllers.exceptions.IllegalOrphanException;
-import net.milanvit.iforum.controllers.exceptions.NonexistentEntityException;
-import net.milanvit.iforum.controllers.exceptions.RollbackFailureException;
 import net.milanvit.iforum.models.Thread;
 import net.milanvit.iforum.models.User;
 
@@ -35,8 +32,8 @@ public class LockThread extends HttpServlet {
 			throws ServletException, IOException {
 		Thread thread = null;
 		ThreadController threadController = new ThreadController (null, null);
-		UserController userController = new UserController (null, null);
 		User user = null;
+		UserController userController = new UserController (null, null);
 		int id = Integer.parseInt (request.getParameter ("id"));
 		
 		thread = threadController.findThread (id);

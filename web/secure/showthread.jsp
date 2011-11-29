@@ -5,8 +5,8 @@
 --%>
 
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
-<%@page import="net.milanvit.iforum.controllers.PostController"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ page import="net.milanvit.iforum.controllers.PostController" %>
 <%@ page import="net.milanvit.iforum.controllers.ThreadController" %>
 <%@ page contentType="text/html" pageEncoding="UTF-8" %>
 <%! PostController postController = new PostController (null, null); %>
@@ -41,7 +41,8 @@
 		</c:if>
 
 		<p>
-			Maybe you'd like to return to the <a href="index.jsp">title	page</a>?
+			Maybe you'd like to return to the
+			<a href="index.jsp">title page</a>?
 		</p>
 
 		<h2>${thread.title}</h2>
