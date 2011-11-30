@@ -52,7 +52,7 @@ public class LoginUser extends HttpServlet {
 			request.getRequestDispatcher ("indexerror.jsp").forward (request, response);
 		} else {
 			updateLoginCount (user);
-			httpSession.setAttribute ("username", username);
+			httpSession.setAttribute ("user", user);
 			response.sendRedirect ("secure/index.jsp");
 		}
 	}
@@ -65,7 +65,7 @@ public class LoginUser extends HttpServlet {
 			validationErrors.insertNewErrorMessage ("Username is empty!");
 		}
 
-		if (password != null && user != null) {
+		if ((password != null) && (user != null)) {
 			if (!password.equals (user.getPassword ())) {
 				validationErrors.insertNewErrorMessage ("Password is incorrect!");
 			}

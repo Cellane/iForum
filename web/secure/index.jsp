@@ -5,8 +5,8 @@
 --%>
 
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
-<%@ page import="net.milanvit.iforum.controllers.ThreadController" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ page import="net.milanvit.iforum.controllers.ThreadController" %>
 <%@ page session="true" %>
 <%@ page contentType="text/html" pageEncoding="UTF-8" %>
 <%! ThreadController threadController = new ThreadController (null, null); %>
@@ -21,8 +21,9 @@
         <h1>iForum | secured area</h1>
 
 		<p>
-			Hello, <c:out value="${sessionScope.username}" />! Maybe you'd like
-			to see the <a href="listofusers.jsp">list of all users</a>?</p>
+			Hello, ${sessionScope.user.username}! Long time, no see! Maybe you'd
+			like to see the	<a href="listofusers.jsp">list of all users</a>?
+		</p>
 
 		<p>Or maybe it's time to <a href="../logout.jsp">log out</a>?</p>
 

@@ -24,7 +24,7 @@ import net.milanvit.iforum.models.User;
 public class CreateThread extends HttpServlet {
 	private String title;
 	private String post;
-	private String author;
+	private User author;
 	private Date created;
 	private boolean locked;
 	
@@ -43,11 +43,9 @@ public class CreateThread extends HttpServlet {
 		UserController userController = new UserController (null, null);
 		
 		parseValues (request);
-		
-		user = userController.findUser (author);
-		
+				
 		thread = new Thread ();
-		thread.setAuthor (user);
+		thread.setAuthor (author);
 		thread.setCreated (created);
 		thread.setLocked (locked);
 		thread.setPost (post);
@@ -65,7 +63,7 @@ public class CreateThread extends HttpServlet {
 	private void parseValues (HttpServletRequest request) {
 		title = request.getParameter ("title");
 		post = request.getParameter ("post");
-		author = (String) request.getSession ().getAttribute ("username");
+		author = (User) request.getSession ().getAttribute ("user");
 		created = new Date ();
 		locked = false;
 	}

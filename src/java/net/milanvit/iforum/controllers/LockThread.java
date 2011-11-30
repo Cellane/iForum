@@ -33,13 +33,12 @@ public class LockThread extends HttpServlet {
 		Thread thread = null;
 		ThreadController threadController = new ThreadController (null, null);
 		User user = null;
-		UserController userController = new UserController (null, null);
 		int id = Integer.parseInt (request.getParameter ("id"));
 		
 		thread = threadController.findThread (id);
-		user = userController.findUser ((String) request.getSession ().getAttribute ("username"));
+		user = (User) request.getSession ().getAttribute ("user");
 		
-		if (user.getUsername ().equals (thread.getAuthor ().getUsername ())) {
+		if (user.equals (thread.getAuthor ())) {
 			thread.setLocked (!thread.getLocked ());
 			
 			try {

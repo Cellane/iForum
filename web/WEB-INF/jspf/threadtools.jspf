@@ -1,4 +1,4 @@
-<c:if test="${thread.author.username == sessionScope.username}">
+<c:if test="${thread.author == sessionScope.user}">
 	<h2>Thread tools</h2>
 
 	<p>

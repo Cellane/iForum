@@ -25,7 +25,7 @@ import net.milanvit.iforum.models.User;
 public class CreatePost extends HttpServlet {
 	private Date created;
 	private String postText;
-	private String author;
+	private User author;
 	private int threadId;
 	
 	/** 
@@ -46,11 +46,10 @@ public class CreatePost extends HttpServlet {
 		
 		parseVariables (request);
 		
-		user = userController.findUser (author);
 		thread = threadController.findThread (threadId);
 		
 		post = new Post ();
-		post.setAuthor (user);
+		post.setAuthor (author);
 		post.setCreated (created);
 		post.setPost (postText);
 		post.setThread (thread);
@@ -71,7 +70,7 @@ public class CreatePost extends HttpServlet {
 	private void parseVariables (HttpServletRequest request) throws NumberFormatException {
 		postText = request.getParameter ("post");
 		threadId = Integer.parseInt (request.getParameter ("thread"));
-		author = (String) request.getSession ().getAttribute ("username");
+		author = (User) request.getSession ().getAttribute ("user");
 		created = new Date ();
 	}
 

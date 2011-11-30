@@ -13,6 +13,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import net.milanvit.iforum.models.Post;
+import net.milanvit.iforum.models.User;
 
 /**
  *
@@ -31,10 +32,10 @@ public class DeletePost extends HttpServlet {
 			throws ServletException, IOException {
 		PostController postController = new PostController (null, null);
 		Post post = postController.findPost (Integer.parseInt (request.getParameter ("id")));
-		String username = (String) request.getSession ().getAttribute ("username");
+		User user = (User) request.getSession ().getAttribute ("user");
 		int threadId = post.getThread ().getId ();
 
-		if (post.getAuthor ().getUsername ().equals (username)) {
+		if (post.getAuthor ().equals (user)) {
 			try {
 				postController.destroy (post.getId ());
 

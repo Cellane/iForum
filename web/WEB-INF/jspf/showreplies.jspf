@@ -1,7 +1,7 @@
 <h2>Replies</h2>
 <c:forEach var="post" items="${posts}">
 	<div style="float: right">
-		<c:if test="${post.author.username == sessionScope.username}">
+		<c:if test="${post.author == sessionScope.user}">
 			<a href="deletePost?id=${post.id}">delete</a> |
 		</c:if>
 
@@ -12,3 +12,6 @@
 
 	<p>${post.post}</p>
 </c:forEach>
+<c:if test="${posts.isEmpty ()}">
+	<p>Nobody wrote anything yet in this thread! Oh, the horrors!</p>
+</c:if>

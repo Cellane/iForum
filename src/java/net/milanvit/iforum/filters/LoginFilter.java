@@ -14,6 +14,7 @@ import javax.servlet.ServletResponse;
 import javax.servlet.annotation.WebFilter;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import net.milanvit.iforum.models.User;
 
 /**
  *
@@ -47,9 +48,9 @@ public class LoginFilter implements Filter {
 			throws IOException, ServletException {
 		HttpServletRequest httpServletRequest = (HttpServletRequest) request;
 		HttpServletResponse httpServletResponse = (HttpServletResponse) response;
-		String username = (String) httpServletRequest.getSession ().getAttribute ("username");
+		User user = ((User) httpServletRequest.getSession ().getAttribute ("user"));
 		
-		if ((username == null) || (username.isEmpty ())) {
+		if ((user == null) || (user.getUsername ().isEmpty ())) {
 			httpServletResponse.sendRedirect (httpServletRequest.getContextPath () + "/index.jsp");
 		} else {
 			chain.doFilter (request, response);
