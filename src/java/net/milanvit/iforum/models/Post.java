@@ -32,7 +32,8 @@ import javax.validation.constraints.Size;
 @Table (name = "post")
 @NamedQueries ({
 	@NamedQuery (name = "Post.findAll", query = "SELECT p FROM Post p"),
-	@NamedQuery (name = "Post.findById", query = "SELECT p FROM Post p WHERE p.id = :id")})
+	@NamedQuery (name = "Post.findById", query = "SELECT p FROM Post p WHERE p.id = :id"),
+	@NamedQuery (name = "Post.findByThread", query = "SELECT p FROM Post p WHERE p.thread = :thread")})
 public class Post implements Serializable {
 	private static final long serialVersionUID = 1L;
 	

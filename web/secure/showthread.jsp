@@ -8,12 +8,14 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ page import="net.milanvit.iforum.controllers.PostController" %>
 <%@ page import="net.milanvit.iforum.controllers.ThreadController" %>
+<%@ page import="net.milanvit.iforum.models.Thread" %>
 <%@ page contentType="text/html" pageEncoding="UTF-8" %>
 <%! PostController postController = new PostController (null, null); %>
 <%! ThreadController threadController = new ThreadController (null, null); %>
-<%--<c:set var="posts" value="<%= postController.getEntityManager ().createNamedQuery ("Post.findByThread").setParameter ("thread", threadController.findThread (Integer.parseInt (request.getParameter ("id")))) %>" />--%>
-<c:set var="posts" value="<%= postController.findPostEntities () %>" />
-<c:set var="thread" value="<%= threadController.findThread (Integer.parseInt (request.getParameter ("id"))) %>" />
+<% int threadId = Integer.parseInt (request.getParameter ("id")); %>
+<% Thread thread = threadController.findThread (threadId); %>
+<c:set var="thread" value="<%= thread %>" />
+<c:set var="posts" value="<%= postController.getEntityManager ().createNamedQuery ("Post.findByThread").setParameter ("thread", thread).getResultList () %>" />
 <!DOCTYPE html>
 <html>
     <head>
@@ -57,19 +59,17 @@
 
 		<h2>Replies</h2>
 		<c:forEach var="post" items="${posts}">
-			<c:if test="${post.thread.id == thread.id}">
-				<div style="float: right">
-					<c:if test="${post.author.username == sessionScope.username}">
-						<a href="deletePost?id=${post.id}">delete</a> |
-					</c:if>
-					
-					${post.author.username} on
-					<fmt:formatDate pattern="dd. MM. yyyy, HH.mm:ss"
-									value="${post.created}" />
-				</div>
+			<div style="float: right">
+				<c:if test="${post.author.username == sessionScope.username}">
+					<a href="deletePost?id=${post.id}">delete</a> |
+				</c:if>
 
-				<p>${post.post}</p>
-			</c:if>
+				${post.author.username} on
+				<fmt:formatDate pattern="dd. MM. yyyy, HH.mm:ss"
+								value="${post.created}" />
+			</div>
+
+			<p>${post.post}</p>
 		</c:forEach>
 
 		<c:if test="${!thread.locked}">
