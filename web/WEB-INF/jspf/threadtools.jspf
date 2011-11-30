@@ -1,0 +1,21 @@
+<c:if test="${thread.author.username == sessionScope.username}">
+	<h2>Thread tools</h2>
+
+	<p>
+		You've created this thread. Do you wish to
+	<c:choose>
+		<c:when test="${thread.locked}">
+			<a href="lockThread?id=${thread.id}">unlock</a>
+		</c:when>
+		<c:otherwise>
+			<a href="lockThread?id=${thread.id}">lock</a>
+		</c:otherwise>
+	</c:choose>
+	it?
+</p>
+</c:if>
+
+<p>
+	Maybe you'd like to return to the
+	<a href="index.jsp">title page</a>?
+</p>

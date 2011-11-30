@@ -1,0 +1,14 @@
+<h2>Replies</h2>
+<c:forEach var="post" items="${posts}">
+	<div style="float: right">
+		<c:if test="${post.author.username == sessionScope.username}">
+			<a href="deletePost?id=${post.id}">delete</a> |
+		</c:if>
+
+		${post.author.username} on
+		<fmt:formatDate pattern="dd. MM. yyyy, HH.mm:ss"
+						value="${post.created}" />
+	</div>
+
+	<p>${post.post}</p>
+</c:forEach>
