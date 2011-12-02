@@ -4,8 +4,9 @@
     Author     : Milan
 --%>
 
-<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 <%@ page import="net.milanvit.iforum.controllers.ThreadController" %>
 <%@ page session="true" %>
 <%@ page contentType="text/html" pageEncoding="UTF-8" %>
@@ -27,36 +28,6 @@
 
 		<p>Or maybe it's time to <a href="../logout.jsp">log out</a>?</p>
 
-		<p>
-			Here is the list of all threads. If you'd like to discuss something
-			new, feel free to <a href="createthread.jsp">create new thread</a>!
-		</p>
-
-		<table>
-			<tr>
-				<th>Locked</th>
-				<th>Title</th>
-				<th>Author</th>
-				<th>Created</th>
-			</tr>
-			<c:forEach var="thread" items="${threads}">
-				<tr>
-					<td>
-						<c:choose>
-							<c:when test="${thread.locked}">
-								Locked
-							</c:when>
-							<c:otherwise>
-								Unlocked
-							</c:otherwise>
-						</c:choose>
-					</td>
-					<td><a href="showthread.jsp?id=${thread.id}">${thread.title}</a></td>
-					<td>${thread.author.username}</td>
-					<td><fmt:formatDate pattern="dd. MM. yyyy, HH.mm:ss"
-									value="${thread.created}" /></td>
-				</tr>
-			</c:forEach>
-		</table>
+		<%@ include file="../WEB-INF/jspf/listofthreads.jspf" %>
     </body>
 </html>

@@ -4,18 +4,17 @@
     Author     : Milan
 --%>
 
-<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <%@ page import="net.milanvit.iforum.controllers.PostController" %>
 <%@ page import="net.milanvit.iforum.controllers.ThreadController" %>
 <%@ page import="net.milanvit.iforum.models.Thread" %>
 <%@ page contentType="text/html" pageEncoding="UTF-8" %>
-<%! PostController postController = new PostController (); %>
 <%! ThreadController threadController = new ThreadController (); %>
 <% int threadId = Integer.parseInt (request.getParameter ("id")); %>
 <% Thread thread = threadController.findThread (threadId); %>
 <c:set var="thread" value="<%= thread %>" />
-<c:set var="posts" value="<%= postController.getEntityManager ().createNamedQuery ("Post.findByThread").setParameter ("thread", thread).getResultList () %>" />
+<c:set var="posts" value="<%= thread.getPostCollection () %>" />
 <!DOCTYPE html>
 <html>
     <head>
@@ -24,7 +23,6 @@
     </head>
     <body>
         <h1>iForum | display thread</h1>
-
 		<%@ include file="../WEB-INF/jspf/threadtools.jspf" %>
 
 		<h2>${thread.title}</h2>

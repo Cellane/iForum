@@ -1,0 +1,36 @@
+<h2>Thread list</h2>
+<p>
+	If you'd like to discuss something new, feel free to
+	<a href="createthread.jsp">create new thread</a>!
+</p>
+
+<table>
+	<tr>
+		<th>Locked</th>
+		<th>Title</th>
+		<th>Author</th>
+		<th>Replies</th>
+		<th>Created</th>
+	</tr>
+	<c:forEach var="thread" items="${threads}">
+		<tr>
+			<td>
+		<c:choose>
+			<c:when test="${thread.locked}">
+				Locked
+			</c:when>
+			<c:otherwise>
+				Unlocked
+			</c:otherwise>
+		</c:choose>
+		</td>
+		<td><a href="showthread.jsp?id=${thread.id}">${thread.title}</a></td>
+		<td>${thread.author.username}</td>
+		<td>${fn:length (thread.postCollection)}</td>
+		<td>
+			<fmt:formatDate pattern="dd. MM. yyyy, HH.mm:ss"
+							value="${thread.created}" />
+		</td>
+		</tr>
+	</c:forEach>
+</table>
