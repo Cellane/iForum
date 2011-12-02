@@ -40,11 +40,6 @@ public class UserController implements Serializable {
 	@PersistenceUnit (unitName = "iForumPersistenceUnit")
 	private EntityManagerFactory entityManagerFactory = null;
 
-	public UserController (UserTransaction userTransaction, EntityManagerFactory entityManagerFactory) {
-		this.userTransaction = userTransaction;
-		this.entityManagerFactory = entityManagerFactory;
-	}
-
 	public EntityManager getEntityManager () {
 		if (entityManagerFactory == null) {
 			entityManagerFactory = Persistence.createEntityManagerFactory ("iForumPersistenceUnit");

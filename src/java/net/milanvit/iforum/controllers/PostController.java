@@ -36,11 +36,6 @@ public class PostController implements Serializable {
 	@PersistenceUnit (unitName = "iForumPersistenceUnit")
 	private EntityManagerFactory entityManagerFactory = null;
 
-	public PostController (UserTransaction userTransaction, EntityManagerFactory entityManagerFactory) {
-		this.userTransaction = userTransaction;
-		this.entityManagerFactory = entityManagerFactory;
-	}
-
 	public EntityManager getEntityManager () {
 		if (entityManagerFactory == null) {
 			entityManagerFactory = Persistence.createEntityManagerFactory ("iForumPersistenceUnit");

@@ -9,7 +9,7 @@
 <%@ page import="net.milanvit.iforum.controllers.ThreadController" %>
 <%@ page session="true" %>
 <%@ page contentType="text/html" pageEncoding="UTF-8" %>
-<%! ThreadController threadController = new ThreadController (null, null); %>
+<%! ThreadController threadController = new ThreadController (); %>
 <c:set var="threads" value="<%= threadController.findThreadEntities () %>" />
 <!DOCTYPE html>
 <html>

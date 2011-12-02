@@ -39,11 +39,6 @@ public class ThreadController implements Serializable {
 	@PersistenceUnit (unitName = "iForumPersistenceUnit")
 	private EntityManagerFactory entityManagerFactory = null;
 
-	public ThreadController (UserTransaction userTransaction, EntityManagerFactory entityManagerFactory) {
-		this.userTransaction = userTransaction;
-		this.entityManagerFactory = entityManagerFactory;
-	}
-
 	public EntityManager getEntityManager () {
 		if (entityManagerFactory == null) {
 			entityManagerFactory = Persistence.createEntityManagerFactory ("iForumPersistenceUnit");

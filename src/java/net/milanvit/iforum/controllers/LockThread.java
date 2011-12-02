@@ -31,7 +31,7 @@ public class LockThread extends HttpServlet {
 	protected void processRequest (HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 		Thread thread = null;
-		ThreadController threadController = new ThreadController (null, null);
+		ThreadController threadController = new ThreadController ();
 		User user = null;
 		int id = Integer.parseInt (request.getParameter ("id"));
 		

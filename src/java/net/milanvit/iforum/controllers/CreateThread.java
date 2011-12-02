@@ -38,9 +38,9 @@ public class CreateThread extends HttpServlet {
 	protected void processRequest (HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 		Thread thread = null;
-		ThreadController threadController = new ThreadController (null, null);
+		ThreadController threadController = new ThreadController ();
 		User user = null;
-		UserController userController = new UserController (null, null);
+		UserController userController = new UserController ();
 		
 		parseValues (request);
 				

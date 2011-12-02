@@ -40,7 +40,7 @@ public class RegisterUser extends HttpServlet {
 	protected void processRequest (HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 		User user = null;
-		UserController userController = new UserController (null, null);
+		UserController userController = new UserController ();
 
 		parseValues (request);
 		validateValues ();

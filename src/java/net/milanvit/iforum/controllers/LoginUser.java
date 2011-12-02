@@ -27,7 +27,7 @@ public class LoginUser extends HttpServlet {
 	private String username;
 	private String password;
 	private User user;
-	private UserController userController = new UserController (null, null);
+	private UserController userController = new UserController ();
 	private ValidationErrors validationErrors = new ValidationErrors ();
 
 	/** 

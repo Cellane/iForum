@@ -10,8 +10,8 @@
 <%@ page import="net.milanvit.iforum.controllers.ThreadController" %>
 <%@ page import="net.milanvit.iforum.models.Thread" %>
 <%@ page contentType="text/html" pageEncoding="UTF-8" %>
-<%! PostController postController = new PostController (null, null); %>
-<%! ThreadController threadController = new ThreadController (null, null); %>
+<%! PostController postController = new PostController (); %>
+<%! ThreadController threadController = new ThreadController (); %>
 <% int threadId = Integer.parseInt (request.getParameter ("id")); %>
 <% Thread thread = threadController.findThread (threadId); %>
 <c:set var="thread" value="<%= thread %>" />

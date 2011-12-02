@@ -30,7 +30,7 @@ public class DeletePost extends HttpServlet {
 	 */
 	protected void processRequest (HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
-		PostController postController = new PostController (null, null);
+		PostController postController = new PostController ();
 		Post post = postController.findPost (Integer.parseInt (request.getParameter ("id")));
 		User user = (User) request.getSession ().getAttribute ("user");
 		int threadId = post.getThread ().getId ();
