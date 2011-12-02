@@ -41,10 +41,7 @@ public class LoginUser extends HttpServlet {
 			throws ServletException, IOException {
 		HttpSession httpSession = request.getSession ();
 
-		username = request.getParameter ("username");
-		password = Hash.toSHA256 (request.getParameter ("password"));
-		user = userController.findUser (username);
-
+		parseValues (request);
 		validateValues ();
 
 		if (!validationErrors.isEmpty ()) {
@@ -55,6 +52,12 @@ public class LoginUser extends HttpServlet {
 			httpSession.setAttribute ("user", user);
 			response.sendRedirect ("secure/index.jsp");
 		}
+	}
+
+	private void parseValues (HttpServletRequest request) {
+		username = request.getParameter ("username");
+		password = Hash.toSHA256 (request.getParameter ("password"));
+		user = userController.findUser (username);
 	}
 
 	/**

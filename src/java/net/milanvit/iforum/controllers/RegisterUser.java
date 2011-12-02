@@ -65,6 +65,26 @@ public class RegisterUser extends HttpServlet {
 	}
 
 	/**
+	 * Parses the values from registration form.
+	 * @param request servlet request
+	 */
+	private void parseValues (HttpServletRequest request) {
+		username = request.getParameter ("username");
+		password = request.getParameter ("password");
+		passwordAgain = request.getParameter ("passwordagain");
+
+		try {
+			age = Integer.parseInt (request.getParameter ("age"));
+		} catch (NumberFormatException nfe) {
+			age = 0;
+			validationErrors.insertNewErrorMessage ("Age is not a number!");
+		}
+
+		avatar = request.getParameter ("avatar");
+		sex = (Integer.parseInt (request.getParameter ("sex")) == 1);
+	}
+
+	/**
 	 * Validates values entered in registration form.
 	 */
 	private void validateValues () {
@@ -86,26 +106,6 @@ public class RegisterUser extends HttpServlet {
 		if (!matcher.matches ()) {
 			validationErrors.insertNewErrorMessage ("Avatar URL is not valid!");
 		}
-	}
-
-	/**
-	 * Parses the values from registration form.
-	 * @param request servlet request
-	 */
-	private void parseValues (HttpServletRequest request) {
-		username = request.getParameter ("username");
-		password = request.getParameter ("password");
-		passwordAgain = request.getParameter ("passwordagain");
-
-		try {
-			age = Integer.parseInt (request.getParameter ("age"));
-		} catch (NumberFormatException nfe) {
-			age = 0;
-			validationErrors.insertNewErrorMessage ("Age is not a number!");
-		}
-
-		avatar = request.getParameter ("avatar");
-		sex = (Integer.parseInt (request.getParameter ("sex")) == 1);
 	}
 
 	// <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">

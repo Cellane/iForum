@@ -16,6 +16,7 @@ import javax.servlet.http.HttpServletResponse;
 import net.milanvit.iforum.models.Post;
 import net.milanvit.iforum.models.Thread;
 import net.milanvit.iforum.models.User;
+import net.milanvit.iforum.models.ValidationErrors;
 
 /**
  *
@@ -27,6 +28,7 @@ public class CreatePost extends HttpServlet {
 	private String postText;
 	private User author;
 	private int threadId;
+	private ValidationErrors validationErrors = new ValidationErrors ();
 	
 	/** 
 	 * Processes requests for both HTTP <code>GET</code> and <code>POST</code> methods.
@@ -41,20 +43,21 @@ public class CreatePost extends HttpServlet {
 		PostController postController = new PostController ();
 		Thread thread = null;
 		ThreadController threadController = new ThreadController ();
-		User user = null;
-		UserController userController = new UserController ();
 		
-		parseVariables (request);
+		parseValues (request);
 		
 		thread = threadController.findThread (threadId);
 		
-		post = new Post ();
+		validateValues (thread);
+		
+		post = new Post (null, created, postText);
 		post.setAuthor (author);
-		post.setCreated (created);
-		post.setPost (postText);
 		post.setThread (thread);
 		
-		if (!thread.getLocked ()) {		
+		if (!validationErrors.isEmpty ()) {
+			request.setAttribute ("validationErrors", validationErrors);
+			request.getRequestDispatcher ("submissionerror.jsp").forward (request, response);
+		} else {
 			try {
 				postController.create (post);
 			
@@ -62,12 +65,20 @@ public class CreatePost extends HttpServlet {
 			} catch (Exception e) {
 				Logger.getLogger (CreatePost.class.getName()).log (Level.SEVERE, null, e);
 			}
-		} else {
-			System.out.println ("Someone's hacking us! Halp!");
 		}
 	}
 
-	private void parseVariables (HttpServletRequest request) throws NumberFormatException {
+	private void validateValues (Thread thread) {
+		if ((postText.equals ("")) || (postText == null)) {
+			validationErrors.insertNewErrorMessage ("Reply is empty!");
+		}
+		
+		if (thread.getLocked ()) {
+			validationErrors.insertNewErrorMessage ("Thread is locked!");
+		}
+	}
+
+	private void parseValues (HttpServletRequest request) throws NumberFormatException {
 		postText = request.getParameter ("post");
 		threadId = Integer.parseInt (request.getParameter ("thread"));
 		author = (User) request.getSession ().getAttribute ("user");

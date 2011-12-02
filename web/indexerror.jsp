@@ -5,7 +5,6 @@
 --%>
 
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-<%@ page import="java.util.ArrayList" %>
 <%@ page contentType="text/html" pageEncoding="UTF-8" %>
 <jsp:useBean id="validationErrors" scope="request" class="net.milanvit.iforum.models.ValidationErrors" />
 <!DOCTYPE html>
@@ -21,7 +20,7 @@
 
 		<ul>
 			<c:forEach var="errorMessage" items="${validationErrors.errorMessages}">
-				<li><c:out value="${errorMessage}" /></li>
+				<li>${errorMessage}</li>
 			</c:forEach>
 			<% validationErrors.emptyMessages (); %>
 		</ul>

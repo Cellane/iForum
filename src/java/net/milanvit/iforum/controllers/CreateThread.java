@@ -15,6 +15,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import net.milanvit.iforum.models.Thread;
 import net.milanvit.iforum.models.User;
+import net.milanvit.iforum.models.ValidationErrors;
 
 /**
  *
@@ -27,7 +28,8 @@ public class CreateThread extends HttpServlet {
 	private User author;
 	private Date created;
 	private boolean locked;
-	
+	private ValidationErrors validationErrors = new ValidationErrors ();
+
 	/** 
 	 * Processes requests for both HTTP <code>GET</code> and <code>POST</code> methods.
 	 * @param request servlet request
@@ -39,31 +41,43 @@ public class CreateThread extends HttpServlet {
 			throws ServletException, IOException {
 		Thread thread = null;
 		ThreadController threadController = new ThreadController ();
-		
+
 		parseValues (request);
-				
-		thread = new Thread ();
+		validateValues ();
+
+		thread = new Thread (null, created, locked, post, title);
 		thread.setAuthor (author);
-		thread.setCreated (created);
-		thread.setLocked (locked);
-		thread.setPost (post);
-		thread.setTitle (title);
-		
-		try {
-			threadController.create (thread);
-			
-			response.sendRedirect ("index.jsp");
-		} catch (Exception e) {
-			Logger.getLogger (CreateThread.class.getName()).log (Level.SEVERE, null, e);
+
+		if (!validationErrors.isEmpty ()) {
+			request.setAttribute ("validationErrors", validationErrors);
+			request.getRequestDispatcher ("submissionerror.jsp").forward (request, response);
+		} else {
+			try {
+				threadController.create (thread);
+
+				response.sendRedirect ("index.jsp");
+			} catch (Exception e) {
+				Logger.getLogger (CreateThread.class.getName ()).log (Level.SEVERE, null, e);
+			}
 		}
 	}
-	
+
 	private void parseValues (HttpServletRequest request) {
 		title = request.getParameter ("title");
 		post = request.getParameter ("post");
 		author = (User) request.getSession ().getAttribute ("user");
 		created = new Date ();
 		locked = false;
+	}
+
+	private void validateValues () {
+		if ((title.equals ("")) || (title == null)) {
+			validationErrors.insertNewErrorMessage ("Title is empty!");
+		}
+
+		if ((post.equals ("")) || (post == null)) {
+			validationErrors.insertNewErrorMessage ("Post is empty!");
+		}
 	}
 
 	// <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
