@@ -8,7 +8,7 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ page import="net.milanvit.iforum.controllers.UserController" %>
 <%@ page import="java.util.List" %>
-<%! UserController userController = new UserController (null, null); %>
+<%! UserController userController = new UserController (); %>
 <c:set var="users" value="<%= userController.findUserEntities () %>" />
 <!DOCTYPE html>
 <html>
