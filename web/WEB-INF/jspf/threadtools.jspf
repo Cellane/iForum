@@ -1,3 +1,9 @@
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<p>
+	Maybe you'd like to return to the
+	<a href="index.jsp">title page</a>?
+</p>
+
 <c:if test="${thread.author == sessionScope.user}">
 	<h2>Thread tools</h2>
 
@@ -14,8 +20,3 @@
 	it?
 </p>
 </c:if>
-
-<p>
-	Maybe you'd like to return to the
-	<a href="index.jsp">title page</a>?
-</p>
